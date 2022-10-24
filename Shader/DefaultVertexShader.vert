@@ -7,5 +7,4 @@ void main(void)
 {
     gl_Position = qt_ModelViewProjectionMatrix * qt_Vertex;
 
-
 }

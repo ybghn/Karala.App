@@ -12,7 +12,7 @@
 #include <QGLShader>
 #include <QMatrix4x4>
 #include "Shapes/shape.h"
-
+#include "shapecounter.h"
 enum DrawingState{
     None,Begin,Moving,End,Cancelled
 };
@@ -22,14 +22,15 @@ enum ShapeTypes{
     ETriangle,
     EBox,
     ECircle,
+    EHexagon,
     EErase,
 };
 class Canvas : public QGLWidget , public  QGLFunctions
 {
 public:
-    Canvas(QWidget* _parent = nullptr);
+    Canvas(ShapeCounter *shapeCtr,QWidget* _parent = nullptr);
     void AddNewShape(Shape *newShape);
-
+ void SetTypeOfShape(QString _type);
 protected:
     void initializeGL() override;
     void resizeGL(int w, int h) override;
@@ -39,9 +40,11 @@ private:
     void Draw();
     void DefaultShader();
     void CanvasMovement();
+
     DrawingState drawingState = None;
     ShapeTypes shape = EPoint;
     QVector<Shape*> shapes;
+    ShapeCounter *shapeCounter;
     QGLShaderProgram *shaderProgram;
     QGLShader *vertexShader;
     QGLShader* fragmentShader;

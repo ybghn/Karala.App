@@ -12,23 +12,27 @@ LIBS += -lopengl32
 SOURCES += \
     Shapes/box.cpp \
     Shapes/circle.cpp \
+    Shapes/hexagon.cpp \
     Shapes/point.cpp \
     Shapes/shape.cpp \
     Shapes/triangle.cpp \
     canvas.cpp \
     Shapes/line.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    shapecounter.cpp
 
 HEADERS += \
     Shapes/box.h \
     Shapes/circle.h \
+    Shapes/hexagon.h \
     Shapes/point.h \
     Shapes/shape.h \
     Shapes/triangle.h \
     canvas.h \
     Shapes/line.h \
-    mainwindow.h
+    mainwindow.h \
+    shapecounter.h
 
 FORMS += \
     mainwindow.ui

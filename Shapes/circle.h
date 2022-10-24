@@ -15,6 +15,8 @@ public:
     void Update(QPointF _last) override;
 
 private:
+    void DrawRightToLeft();
+    void DrawLeftToRight();
     const static  int sizeOfPoint{100};
      float vertices[sizeOfPoint*4+1];
 

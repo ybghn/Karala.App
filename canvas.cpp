@@ -4,11 +4,14 @@
 #include "Shapes/triangle.h"
 #include "Shapes/circle.h"
 #include "Shapes/point.h"
+#include "Shapes/hexagon.h"
+
 
 #define initPos event->localPos(),event->localPos()
 
-Canvas::Canvas(QWidget* _parent)
+Canvas::Canvas(ShapeCounter *_shapeCtr,QWidget* _parent)
 {
+    shapeCounter =_shapeCtr;
     setParent(_parent);
     QRect geometry(QPoint(200,50),QSize(512,512));
     setGeometry(geometry);
@@ -19,11 +22,11 @@ Canvas::Canvas(QWidget* _parent)
 
 void Canvas::initializeGL()
 {
-
+    initializeGLFunctions(this->context());
     DefaultShader();
     glEnable(GL_LINE_SMOOTH);
     glEnable(GL_DEPTH_TEST);
-    glClearColor(0.2,0.2,0.2,1);
+    glClearColor(0.9,0.9,0.9,1);
 //    glMatrixMode(GL_MODELVIEW); // why ?
 
 
@@ -74,6 +77,7 @@ void Canvas::mousePressEvent(QMouseEvent *event)
         Line * line = new Line(initPos);
         AddNewShape(line);
         drawingState = Moving;
+        shapeCounter->AddLine();
         break;
     }
     case EBox:
@@ -81,6 +85,7 @@ void Canvas::mousePressEvent(QMouseEvent *event)
         Box* box = new Box(initPos);
         AddNewShape(box);
         drawingState =Moving;
+          shapeCounter->AddBox();
         break;
     }
     case ETriangle:
@@ -88,6 +93,7 @@ void Canvas::mousePressEvent(QMouseEvent *event)
         Triangle *triangle = new Triangle(initPos);
         AddNewShape(triangle);
         drawingState = Moving;
+          shapeCounter->AddTriangle();
         break;
     }
     case ECircle:
@@ -95,6 +101,7 @@ void Canvas::mousePressEvent(QMouseEvent *event)
         Circle *circle = new Circle(initPos);
         AddNewShape(circle);
         drawingState = Moving;
+          shapeCounter->AddCircle();
         break;
     }
     case EPoint:
@@ -102,6 +109,15 @@ void Canvas::mousePressEvent(QMouseEvent *event)
         Point * point = new Point(initPos);
         AddNewShape(point);
         drawingState = Moving;
+          shapeCounter->AddPen();
+        break;
+    }
+    case EHexagon:
+    {
+        Hexagon* hexagon = new Hexagon(initPos);
+         AddNewShape(hexagon);
+         drawingState = Moving;
+           shapeCounter->AddHexagon();
         break;
     }
     default:
@@ -176,8 +192,22 @@ void Canvas::CanvasMovement()
     projection.ortho(0,w,h,0,0.1,101);
 
     canvasMatrix = projection*view*model;
+//    qDebug()  <<"Model : "<<model;
+//    qDebug() <<"View : "<< view;
+//    qDebug() << "Projection : "<< projection;
+//    qDebug() << "Canvas Matrix : " << canvasMatrix;
     shaderProgram->setUniformValue(shaderProgram->uniformLocation("canvasMatrix"),canvasMatrix);
 
 
 
+}
+
+void Canvas::SetTypeOfShape(QString _type)
+{
+shape = (_type=="Line") ? ELine: shape;
+shape = (_type=="Triangle") ? ETriangle: shape;
+shape = (_type=="Box") ? EBox: shape;
+shape = (_type=="Pen") ? EPoint: shape;
+shape = (_type=="Circle") ? ECircle: shape;
+shape = (_type=="Hexagon") ? EHexagon: shape;
 }
